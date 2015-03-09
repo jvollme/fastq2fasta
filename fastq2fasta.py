@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-import os.path, gzip, bz2, zipfile
+import os.path, gzip, bz2, zipfile, sys
 from Bio import SeqIO
 import argparse
 
@@ -44,8 +44,12 @@ def readwrite_fasta(infilename, outfilename):
 			infile = open(infilename, 'r')
 		outfile=open(outfilename, "w")
 		input_seq_iterator=SeqIO.parse(infile, "fastq")
+		recordcounter = 0
 		for record in input_seq_iterator:
 			SeqIO.write(record, outfile, "fasta")
+			recordcounter += 1
+			sys.stdout.write("\rprocessed " + str(recordcounter) + " reads")
+			sys.stdout.flush()
 		outfile.close()
 		infile.close()
 	except Exception, ex:
