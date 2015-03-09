@@ -1,11 +1,11 @@
 #!/usr/bin/python
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-import os.path, gzip, bz2, zipfile, sys
+import os.path, gzip, bz2, zipfile
 from Bio import SeqIO
 import argparse
 
-version = "0.1 (14.12.14)"
+version = "0.2 (09.03.15)"
 name = "fastq2fasta.py"
 #created 08.12.2014 by John Vollmers
 parser=argparse.ArgumentParser(description = "convert fastq format into fasta. version = " + version)
@@ -43,15 +43,10 @@ def readwrite_fasta(infilename, outfilename):
 		else:
 			infile = open(infilename, 'r')
 		outfile=open(outfilename, "w")
-		input_seq_iterator=SeqIO.parse(infile, "fastq")
-		recordcounter = 0
-		for record in input_seq_iterator:
-			SeqIO.write(record, outfile, "fasta")
-			recordcounter += 1
-			sys.stdout.write("\rprocessed " + str(recordcounter) + " reads")
-			sys.stdout.flush()
+		outcounter = SeqIO.convert(infile, "fastq-sanger", outfile, "fasta")
 		outfile.close()
 		infile.close()
+		return outcounter
 	except Exception, ex:
 		print ex.__class__.__name__ + " : " + str(ex)
 		return None
@@ -62,5 +57,5 @@ if args.output_fasta == None:
 else:
 	output_fasta = args.output_fasta
 
-readwrite_fasta(input_fastq, output_fasta)
-print "Wrote sequences in fasta-format to : " + output_fasta
+outnumber = readwrite_fasta(input_fastq, output_fasta)
+print "\nWrote " + str(outnumber) + " sequences in fasta-format to : " + output_fasta
