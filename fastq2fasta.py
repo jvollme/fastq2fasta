@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 import os.path, gzip, bz2, zipfile
@@ -12,7 +12,7 @@ parser=argparse.ArgumentParser(description = "convert fastq format into fasta. v
 parser.add_argument('-if', '--in_fastq', action = "store", dest = "input_fastq", required = True, help = "Input fastq file")
 parser.add_argument('-of', '--out_fasta', action = "store", dest = "output_fasta", default = None, help = "Output fasta file (Default=<input_fastq>.fasta")
 parser.add_argument('-ct','--compression', action = "store", dest = "compression_type", choices = ["gzip","gz", "bzip2","bz2", "zip", "none"], help = "type of compression ('gz', 'bz2', 'zip', 'none'). default= guess compression-format based on filename extension")
-parser.add_argument('-V', '--version', action="version", version=name + " version " + version) 
+parser.add_argument('-V', '--version', action = "version", version = name + " version " + version) 
 args = parser.parse_args()
 
 if args.compression_type != None:
@@ -28,7 +28,6 @@ else: #if no compression format explicitely provided, try to guess it from filen
 		compression_type = "none"
 
 def readwrite_fasta(infilename, outfilename):
-	#	print "reading fasta"
 	try:
 		if compression_type in ["gzip", "gz"]:
 			infile = gzip.open(infilename, 'r')
@@ -42,7 +41,7 @@ def readwrite_fasta(infilename, outfilename):
 				infile = myzipfile.open(myzipfile.namelist()[0])
 		else:
 			infile = open(infilename, 'r')
-		outfile=open(outfilename, "w")
+		outfile  = open(outfilename, "w")
 		outcounter = SeqIO.convert(infile, "fastq-sanger", outfile, "fasta")
 		outfile.close()
 		infile.close()
