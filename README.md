@@ -2,6 +2,10 @@
 
 convert fastq files into fasta (ignoring quality score information). Can read and write compressed files.
 
+#### dependencies:
+ - python 2.7+
+ - biopython
+
 #### usage: 
 
 ````
